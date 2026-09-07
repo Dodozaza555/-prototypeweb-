@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ป้องแป๋งนมสด | จองโต๊ะ &amp; สั่งเมนู</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon-900:#5e1220;
+    --maroon-700:#7f1d2c;
+    --maroon-600:#9a2638;
+    --cream-100:#fbf3e6;
+    --cream-200:#f4e6cf;
+    --cream-300:#ecd9b8;
+    --gold-500:#c69a2c;
+    --gold-300:#e3c162;
+    --ink:#2c1810;
+    --ink-soft:#6b5347;
+    --green-600:#3d6b48;
+    --green-100:#dcead9;
+    --red-600:#a83a35;
+    --red-100:#f3ded9;
+    --gold-100:#f6e9c8;
+    --shadow: 0 10px 30px rgba(94,18,32,.14);
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 9px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Sarabun',sans-serif;
+    background: radial-gradient(1200px 700px at 50% -10%, #3a0d16 0%, #200709 55%, #150406 100%);
+    color:var(--ink);
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:28px 14px calc(60px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3,.brand,.btn,.step-label,.price,.section-title{font-family:'Kanit',sans-serif;}
+
+  .phone{
+    width:420px;
+    max-width:100%;
+    background:var(--cream-100);
+    border-radius:34px;
+    overflow:hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,.55), 0 0 0 8px #1a0508;
+    position:relative;
+    margin:0 auto;
+  }
+  .statusbar{
+    height:30px;
+    background:transparent;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:env(safe-area-inset-top) 22px 0;
+    font-size:12px;
+    color:#fff;
+    position:absolute;
+    top:0;left:0;right:0;
+    z-index:5;
+    font-weight:600;
+  }
+  .topbar{
+    background:linear-gradient(155deg,var(--maroon-900),var(--maroon-700));
+    color:var(--cream-100);
+    padding:calc(38px + env(safe-area-inset-top)) 20px 16px;
+    position:relative;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:19px;
+    font-weight:600;
+    letter-spacing:.2px;
+  }
+  .brand .mark{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--gold-300);
+    display:flex;align-items:center;justify-content:center;
+    font-size:17px;color:var(--maroon-900);font-weight:700;
+  }
+  .brand small{display:block;font-family:'Sarabun',sans-serif;font-weight:400;font-size:11px;color:var(--cream-300);letter-spacing:.5px;}
+
+  .steps{
+    display:flex;
+    gap:6px;
+    margin-top:16px;
+  }
+  .steps .dot{
+    flex:1;
+    height:4px;
+    border-radius:3px;
+    background:rgba(255,255,255,.22);
+    position:relative;
+    overflow:hidden;
+  }
+  .steps .dot.done, .steps .dot.active{background:var(--gold-300);}
+
+  .screen{
+    display:none;
+    padding:20px 20px calc(26px + env(safe-area-inset-bottom));
+    min-height:520px;
+  }
+  .screen.active{display:block; animation: fadein .35s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .eyebrow{font-size:12.5px; color:var(--maroon-700); font-weight:600; margin:0 0 4px;}
+  .title{font-size:21px; font-weight:600; margin:0 0 6px; color:var(--ink);}
+  .subtitle{font-size:13.5px; color:var(--ink-soft); margin:0 0 20px; line-height:1.6;}
+
+  label.field-label{display:block; font-size:13px; font-weight:600; color:var(--ink); margin:16px 0 6px;}
+  input[type=text], input[type=tel]{
+    width:100%;
+    padding:13px 14px;
+    border-radius:var(--radius-sm);
+    border:1.5px solid var(--cream-300);
+    background:#fff;
+    font-family:'Sarabun',sans-serif;
+    font-size:14.5px;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .15s;
+  }
+  input:focus{border-color:var(--gold-500);}
+  .hint{font-size:11.5px; color:var(--ink-soft); margin-top:6px;}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:14px 16px;
+    border-radius:var(--radius-md);
+    border:none;
+    background:linear-gradient(155deg,var(--maroon-700),var(--maroon-900));
+    color:var(--cream-100);
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    margin-top:22px;
+    transition:transform .12s, box-shadow .12s, opacity .15s;
+  }
+  .btn:active{transform:translateY(1px) scale(.99);}
+  .btn.secondary{
+    background:transparent;
+    color:var(--maroon-700);
+    box-shadow:none;
+    border:1.5px solid var(--maroon-700);
+  }
+  .btn.ghost{
+    background:transparent;
+    color:var(--ink-soft);
+    box-shadow:none;
+    font-weight:500;
+    margin-top:10px;
+    font-size:13.5px;
+  }
+  .btn:disabled{opacity:.42; cursor:not-allowed; box-shadow:none;}
+  .btn-row{display:flex; gap:10px;}
+  .btn-row .btn{margin-top:14px;}
+
+  .back-link{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:13px; color:var(--cream-200); background:none; border:none;
+    cursor:pointer; padding:0; margin-bottom:2px; font-family:'Sarabun',sans-serif;
+  }
+
+  /* MENU SCREEN */
+  .chip-row{display:flex; gap:8px; overflow-x:auto; padding:2px 0 6px; margin-bottom:4px; scrollbar-width:none;}
+  .chip-row::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:8px 14px;
+    border-radius:20px;
+    background:#fff;
+    border:1.5px solid var(--cream-300);
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:all .15s;
+  }
+  .chip.active{background:var(--maroon-700); border-color:var(--maroon-700); color:#fff;}
+
+  .section-title{font-size:14.5px; font-weight:600; margin:18px 0 10px; display:flex; align-items:center; justify-content:space-between;}
+  .section-title span.tag{font-family:'Sarabun',sans-serif;font-size:11px; font-weight:600; color:var(--gold-500); background:var(--gold-100); padding:3px 8px; border-radius:10px;}
+
+  .set-card{
+    background:linear-gradient(120deg,var(--maroon-900),var(--maroon-700));
+    border-radius:var(--radius-md);
+    padding:14px;
+    color:var(--cream-100);
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .set-card .info b{display:block; font-size:14px; margin-bottom:3px;}
+  .set-card .info span{font-size:11.5px; color:var(--cream-300); line-height:1.5;}
+  .set-card button{
+    flex:0 0 auto;
+    background:var(--gold-300);
+    color:var(--maroon-900);
+    border:none;
+    padding:8px 13px;
+    border-radius:10px;
+    font-family:'Kanit',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:11px;}
+  .prod-card{
+    background:#fff;
+    border-radius:var(--radius-md);
+    padding:11px;
+    border:1px solid var(--cream-300);
+    position:relative;
+  }
+  .prod-card .thumb{
+    height:66px; border-radius:10px; margin-bottom:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+  }
+  .prod-card .pname{font-size:13px; font-weight:600; line-height:1.35; margin:0 0 4px;}
+  .prod-card .prow{display:flex; align-items:center; justify-content:space-between; margin-top:6px;}
+  .prod-card .price{font-size:13.5px; font-weight:600; color:var(--maroon-700);}
+  .add-btn{
+    width:27px; height:27px; border-radius:50%;
+    background:var(--maroon-700); color:#fff; border:none;
+    font-size:16px; cursor:pointer; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qty-badge{
+    position:absolute; top:8px; right:8px;
+    background:var(--gold-500); color:#fff;
+    font-size:11px; font-weight:700;
+    min-width:18px; height:18px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 4px;
+  }
+
+  .cart-bar{
+    position:sticky; bottom:0; margin-top:18px;
+    background:var(--maroon-900); color:var(--cream-100);
+    border-radius:16px; padding:12px 15px;
+    display:flex; align-items:center; justify-content:space-between;
+    box-shadow:var(--shadow); cursor:pointer;
+  }
+  .cart-bar .cb-left{display:flex; align-items:center; gap:10px; font-size:13px;}
+  .cart-bar .cb-count{
+    background:var(--gold-300); color:var(--maroon-900);
+    width:24px;height:24px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700; font-size:12.5px;
+  }
+  .cart-bar .cb-total{font-weight:700; font-size:14.5px;}
+
+  /* MODAL */
+  .modal-wrap{
+    position:absolute; inset:0; background:rgba(44,24,16,.5);
+    display:none; align-items:flex-end; justify-content:center; z-index:20;
+  }
+  .modal-wrap.show{display:flex;}
+  .modal{
+    width:100%; background:var(--cream-100);
+    border-radius:22px 22px 0 0; padding:22px 20px 24px;
+    animation:slideup .25s ease;
+  }
+  @keyframes slideup{from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+  .modal h3{margin:0 0 4px; font-size:16.5px;}
+  .modal .mp{font-size:12.5px; color:var(--ink-soft); margin:0 0 16px;}
+  .sweet-opt{
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .sweet-opt label{
+    flex:1; text-align:center; padding:13px 6px;
+    border:1.6px solid var(--cream-300); border-radius:12px;
+    font-size:13px; font-weight:600; color:var(--ink-soft);
+    cursor:pointer; position:relative;
+  }
+  .sweet-opt input{position:absolute; opacity:0;}
+  .sweet-opt input:checked + label{border-color:var(--maroon-700); background:var(--gold-100); color:var(--maroon-700);}
+  .sweet-opt label{display:block;}
+  .sweet-opt{position:relative;}
+  .topping-list{margin-top:14px;}
+  .topping-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:9px 0; border-bottom:1px solid var(--cream-300); font-size:13px;
+  }
+  .topping-row .tprice{color:var(--ink-soft); font-size:12px;}
+  .topping-row input{width:16px;height:16px;accent-color:var(--maroon-700);}
+
+  /* full cart modal */
+  .cart-item-row{display:flex; justify-content:space-between; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--cream-300); gap:10px;}
+  .cart-item-row .ci-name{font-size:13.5px; font-weight:600;}
+  .cart-item-row .ci-meta{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .cart-item-row .ci-price{font-size:13px; font-weight:600; white-space:nowrap;}
+  .ci-remove{background:none;border:none;color:var(--red-600);font-size:11.5px;cursor:pointer;padding:0;margin-top:4px;}
+  .cart-total-row{display:flex; justify-content:space-between; padding:14px 0 4px; font-size:15.5px; font-weight:700; color:var(--maroon-900);}
+
+  /* TABLE SCREEN */
+  .toggle-2d3d{display:flex; background:#fff; border:1.5px solid var(--cream-300); border-radius:12px; padding:3px; margin-bottom:16px;}
+  .toggle-2d3d button{
+    flex:1; border:none; background:transparent; padding:9px; border-radius:9px;
+    font-family:'Kanit',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+  }
+  .toggle-2d3d button.active{background:var(--maroon-700); color:#fff;}
+
+  .legend{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; font-size:11px; color:var(--ink-soft);}
+  .legend span{display:inline-flex; align-items:center; gap:5px;}
+  .legend i{width:9px;height:9px;border-radius:50%; display:inline-block;}
+
+  .floor{background:#fff; border-radius:var(--radius-md); border:1px solid var(--cream-300); padding:16px; perspective:900px;}
+  .zone{margin-bottom:16px;}
+  .zone:last-child{margin-bottom:0;}
+  .zone-h{font-size:12.5px; font-weight:600; color:var(--maroon-700); margin-bottom:8px; display:flex; justify-content:space-between;}
+  .zone-h span{font-weight:400; color:var(--ink-soft); font-size:11px;}
+  .tables-row{display:flex; gap:10px; flex-wrap:wrap; transition:transform .4s;}
+  .floor.mode-3d .tables-row{transform:rotateX(38deg) rotateZ(-4deg); transform-style:preserve-3d;}
+  .floor.mode-3d .table-tile{box-shadow:0 14px 0 -6px rgba(44,24,16,.35), 0 16px 18px rgba(44,24,16,.25);}
+  .table-tile{
+    width:78px; height:56px; border-radius:10px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-family:'Kanit',sans-serif; font-size:12.5px; font-weight:600; color:#fff;
+    cursor:pointer; border:2px solid transparent; transition:transform .15s;
+    position:relative;
+  }
+  .table-tile small{font-family:'Sarabun',sans-serif; font-weight:500; font-size:9.5px; opacity:.9;}
+  .table-tile.status-green{background:var(--green-600);}
+  .table-tile.status-gold{background:var(--gold-500);}
+  .table-tile.status-red{background:var(--red-600); cursor:not-allowed; opacity:.65;}
+  .table-tile.selected{border-color:var(--ink); transform:translateY(-3px); box-shadow:0 8px 14px rgba(0,0,0,.25);}
+
+  .share-toggle{
+    display:flex; align-items:center; justify-content:space-between;
+    background:#fff; border:1px solid var(--cream-300); border-radius:var(--radius-md);
+    padding:13px 14px; margin-top:16px;
+  }
+  .share-toggle .st-text b{display:block; font-size:13.5px;}
+  .share-toggle .st-text span{font-size:11.5px; color:var(--ink-soft);}
+  .switch{width:44px; height:25px; border-radius:14px; background:var(--cream-300); position:relative; cursor:pointer; flex:0 0 auto;}
+  .switch .knob{position:absolute; top:3px; left:3px; width:19px; height:19px; border-radius:50%; background:#fff; transition:left .18s; box-shadow:0 1px 3px rgba(0,0,0,.3);}
+  .switch.on{background:var(--green-600);}
+  .switch.on .knob{left:22px;}
+
+  .table-info{
+    background:var(--gold-100); border-radius:var(--radius-md);
+    padding:13px 14px; margin-top:14px; font-size:12.5px; color:var(--ink);
+  }
+  .table-info .ti-row{display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed var(--cream-300);}
+  .table-info .ti-row:last-child{border-bottom:none;}
+
+  /* PAYMENT */
+  .summary-card{background:#fff; border:1px solid var(--cream-300); border-radius:var(--radius-md); padding:14px; margin-bottom:16px;}
+  .summary-card h4{margin:0 0 8px; font-size:13.5px;}
+  .pay-option{
+    display:flex; align-items:flex-start; gap:12px;
+    background:#fff; border:1.6px solid var(--cream-300); border-radius:var(--radius-md);
+    padding:14px; margin-bottom:10px; cursor:pointer;
+  }
+  .pay-option.selected{border-color:var(--maroon-700); background:var(--gold-100);}
+  .pay-option .radio{width:19px; height:19px; border-radius:50%; border:2px solid var(--cream-300); flex:0 0 auto; margin-top:2px; position:relative;}
+  .pay-option.selected .radio{border-color:var(--maroon-700);}
+  .pay-option.selected .radio::after{content:''; position:absolute; inset:3px; background:var(--maroon-700); border-radius:50%;}
+  .pay-option .po-text b{display:block; font-size:13.5px; margin-bottom:2px;}
+  .pay-option .po-text span{font-size:11.5px; color:var(--ink-soft); line-height:1.5;}
+
+  .qr-box{
+    background:#fff; border:1px solid var(--cream-300); border-radius:var(--radius-md);
+    padding:20px; text-align:center; margin-top:14px;
+  }
+  .qr-img{width:150px; height:150px; margin:0 auto 12px; background:#fff; border:1px solid var(--cream-300); border-radius:10px; padding:8px;}
+  .qr-box .amt{font-size:19px; font-weight:700; color:var(--maroon-900); font-family:'Kanit',sans-serif;}
+  .qr-box .qname{font-size:12px; color:var(--ink-soft); margin-top:4px;}
+
+  .proto-note{font-size:10.5px; color:var(--ink-soft); text-align:center; margin-top:16px; opacity:.75; line-height:1.5;}
+
+  /* QUEUE */
+  .queue-hero{text-align:center; padding:10px 0 6px;}
+  .queue-hero .ring{
+    width:150px; height:150px; margin:6px auto 18px; border-radius:50%;
+    background:conic-gradient(var(--gold-500) var(--prog,55%), var(--cream-300) 0);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .queue-hero .ring::before{content:''; position:absolute; inset:11px; background:var(--cream-100); border-radius:50%;}
+  .queue-hero .ring .rtext{position:relative; z-index:2; text-align:center;}
+  .queue-hero .ring .rtext b{display:block; font-size:30px; font-family:'Kanit',sans-serif; color:var(--maroon-900); line-height:1;}
+  .queue-hero .ring .rtext span{font-size:11px; color:var(--ink-soft);}
+
+  .queue-status{font-size:14px; font-weight:600; color:var(--maroon-700); margin-bottom:4px;}
+  .queue-sub{font-size:12.5px; color:var(--ink-soft); margin-bottom:18px;}
+
+  .qinfo-card{background:#fff; border:1px solid var(--cream-300); border-radius:var(--radius-md); padding:14px; margin-bottom:12px;}
+  .qinfo-row{display:flex; justify-content:space-between; font-size:12.5px; padding:6px 0; border-bottom:1px dashed var(--cream-300);}
+  .qinfo-row:last-child{border-bottom:none;}
+  .qinfo-row b{font-weight:600; color:var(--ink);}
+
+  .bell-overlay{
+    position:absolute; inset:0; background:rgba(44,24,16,.55);
+    display:none; align-items:center; justify-content:center; z-index:30; padding:30px;
+  }
+  .bell-overlay.show{display:flex;}
+  .bell-card{
+    background:var(--cream-100); border-radius:22px; padding:28px 24px; text-align:center;
+    animation:pop .3s ease;
+  }
+  @keyframes pop{from{transform:scale(.85); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .bell-card .bell-icon{font-size:44px; margin-bottom:10px;}
+  .bell-card h3{margin:0 0 6px; font-size:18px;}
+  .bell-card p{font-size:12.5px; color:var(--ink-soft); margin:0 0 16px;}
+  .bell-card .tblnum{
+    display:inline-block; background:var(--maroon-900); color:var(--cream-100);
+    font-family:'Kanit',sans-serif; font-weight:600; font-size:17px;
+    padding:9px 22px; border-radius:12px; margin-bottom:16px;
+  }
+
+  ::selection{background:var(--gold-300);}
+
+  /* ---------- RESPONSIVE ---------- */
+
+  /* Small phones (iPhone SE and similar, <=380px) — tighten spacing a touch */
+  @media (max-width:380px){
+    .grid{gap:8px;}
+    .table-tile{width:70px; height:52px; font-size:11.5px;}
+    .title{font-size:19px;}
+    .brand{font-size:17px;}
+  }
+
+  /* Phones — app fills the whole viewport edge-to-edge, no floating card look */
+  @media (max-width:480px){
+    body{padding:0; align-items:stretch; background:var(--cream-100);}
+    .phone{
+      width:100%;
+      max-width:100%;
+      min-height:100vh;
+      min-height:100dvh;
+      border-radius:0;
+      box-shadow:none;
+      margin:0;
+      display:flex;
+      flex-direction:column;
+    }
+    .screen.active{flex:1;}
+    .modal-wrap, .bell-overlay{position:fixed;}
+  }
+
+  /* Tablets — keep the phone-frame centered, slightly larger for comfortable tapping */
+  @media (min-width:481px) and (max-width:900px){
+    .phone{width:440px;}
+  }
+
+  /* Desktop / wide screens — vertically center the phone frame in the viewport */
+  @media (min-width:901px){
+    body{ align-items:center; }
+    .phone{width:420px;}
+  }
+
+  /* Landscape phones — avoid an overly tall single column, allow scroll comfortably */
+  @media (max-width:900px) and (orientation:landscape) and (max-height:500px){
+    body{align-items:flex-start; padding-top:10px;}
+    .phone{border-radius:24px;}
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span>●●●●  📶  🔋</span></div>
+
+  <div class="topbar">
+    <div class="brand"><div class="mark">豆</div><div><div>ป้องแป๋งนมสด</div><small id="topbarSub">ลงชื่อเข้าใช้เพื่อสะสมแต้ม</small></div></div>
+    <div class="steps">
+      <div class="dot active" data-step="1"></div>
+      <div class="dot" data-step="2"></div>
+      <div class="dot" data-step="3"></div>
+      <div class="dot" data-step="4"></div>
+      <div class="dot" data-step="5"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: LOGIN / SIGNUP -->
+  <div class="screen active" id="screen-1">
+    <p class="eyebrow">ขั้นตอนที่ 1 จาก 5</p>
+    <h1 class="title">เข้าสู่ระบบสมาชิก</h1>
+    <p class="subtitle">ลงทะเบียนด้วยเบอร์โทรและชื่อเล่น เพื่อสะสม PongPaeng Points และแลกรับสิทธิพิเศษได้ทุกครั้งที่มาร้าน</p>
+
+    <label class="field-label">เบอร์โทรศัพท์</label>
+    <input type="tel" id="inpPhone" placeholder="081-234-5678" maxlength="10">
+
+    <label class="field-label">ชื่อเล่น</label>
+    <input type="text" id="inpNick" placeholder="เช่น มะปราง">
+
+    <p class="hint">ใช้เบอร์โทรเดิม ระบบจะดึงแต้มสะสมของคุณกลับมาให้อัตโนมัติ</p>
+
+    <button class="btn" id="btnLogin" disabled onclick="goToStep(2)">เข้าสู่ระบบ &amp; เริ่มสั่งเมนู</button>
+    <button class="btn ghost" onclick="skipToGuest()">ข้ามไปก่อน — สั่งแบบไม่สมัครสมาชิก</button>
+  </div>
+
+  <!-- SCREEN 2: MENU -->
+  <div class="screen" id="screen-2">
+    <button class="back-link" style="color:var(--ink-soft); margin-bottom:10px;" onclick="goToStep(1)">‹ กลับ</button>
+    <p class="eyebrow">ขั้นตอนที่ 2 จาก 5</p>
+    <h1 class="title">เลือกเมนูตามใจชอบ</h1>
+    <p class="subtitle">เลือกดูเมนูเองได้เลย หรือให้ระบบจัดเซ็ตให้พอดีกับงบของคุณ</p>
+
+    <div class="section-title">จัดเซ็ตตามงบประมาณ <span class="tag">แนะนำ</span></div>
+    <div class="chip-row" id="budgetChips">
+      <div class="chip" data-budget="0">ทั้งหมด</div>
+      <div class="chip" data-budget="50">ไม่เกิน 50.-</div>
+      <div class="chip" data-budget="100">ไม่เกิน 100.-</div>
+      <div class="chip" data-budget="150">101-150.-</div>
+    </div>
+    <div id="setSuggestions"></div>
+
+    <div class="section-title" style="margin-top:20px;">เมนูทั้งหมด</div>
+    <div class="chip-row" id="catChips">
+      <div class="chip active" data-cat="all">ทั้งหมด</div>
+      <div class="chip" data-cat="milk">นมสด</div>
+      <div class="chip" data-cat="soy">น้ำเต้าหู้</div>
+      <div class="chip" data-cat="toast">ขนมปังปิ้ง</div>
+      <div class="chip" data-cat="dessert">เต้าฮวย/ไอศกรีม</div>
+    </div>
+
+    <div class="grid" id="prodGrid"></div>
+
+    <div class="cart-bar" id="cartBar" style="display:none;" onclick="openCartModal()">
+      <div class="cb-left"><span class="cb-count" id="cbCount">0</span> ดูตะกร้าของคุณ</div>
+      <div class="cb-total" id="cbTotal">0.-</div>
+    </div>
+    <button class="btn" id="btnToTable" disabled onclick="goToStep(3)">ไปเลือกโต๊ะ →</button>
+  </div>
+
+  <!-- SCREEN 3: TABLE -->
+  <div class="screen" id="screen-3">
+    <button class="back-link" style="color:var(--ink-soft); margin-bottom:10px;" onclick="goToStep(2)">‹ กลับไปแก้เมนู</button>
+    <p class="eyebrow">ขั้นตอนที่ 3 จาก 5</p>
+    <h1 class="title">เลือกโต๊ะเพื่อนั่ง</h1>
+    <p class="subtitle">แผนผังร้านแบบเรียลไทม์ แตะโต๊ะที่ต้องการ ระบบจะแจ้งจำนวนที่นั่งว่างให้ทันที</p>
+
+    <div class="toggle-2d3d">
+      <button class="active" id="btn2d" onclick="setFloorMode('2d')">มุมมอง 2D</button>
+      <button id="btn3d" onclick="setFloorMode('3d')">มุมมอง 3D</button>
+    </div>
+
+    <div class="legend">
+      <span><i style="background:var(--green-600)"></i>ว่าง</span>
+      <span><i style="background:var(--gold-500)"></i>นั่งร่วมได้</span>
+      <span><i style="background:var(--red-600)"></i>เต็ม</span>
+    </div>
+
+    <div class="floor mode-2d" id="floorEl">
+      <div class="zone">
+        <div class="zone-h">โซน A <span>1–3 ที่นั่ง</span></div>
+        <div class="tables-row" id="zoneA"></div>
+      </div>
+      <div class="zone">
+        <div class="zone-h">โซน B <span>3–5 ที่นั่ง</span></div>
+        <div class="tables-row" id="zoneB"></div>
+      </div>
+      <div class="zone">
+        <div class="zone-h">โซน D <span>6–10 ที่นั่ง</span></div>
+        <div class="tables-row" id="zoneD"></div>
+      </div>
+    </div>
+
+    <div class="share-toggle">
+      <div class="st-text"><b>อนุญาตให้นั่งร่วมโต๊ะ</b><span>ให้ลูกค้าอื่นนั่งร่วมได้ ถ้าที่นั่งยังเหลือ</span></div>
+      <div class="switch on" id="shareSwitch" onclick="toggleShare()"><div class="knob"></div></div>
+    </div>
+
+    <div class="table-info" id="tableInfo" style="display:none;"></div>
+
+    <button class="btn" id="btnToPayment" disabled onclick="goToStep(4)">ยืนยันโต๊ะ →</button>
+  </div>
+
+  <!-- SCREEN 4: PAYMENT -->
+  <div class="screen" id="screen-4">
+    <button class="back-link" style="color:var(--ink-soft); margin-bottom:10px;" onclick="goToStep(3)">‹ กลับไปเลือกโต๊ะ</button>
+    <p class="eyebrow">ขั้นตอนที่ 4 จาก 5</p>
+    <h1 class="title">ยืนยันออเดอร์และชำระเงิน</h1>
+    <p class="subtitle">ตรวจสอบรายการ แล้วเลือกวิธีชำระเงินที่สะดวกที่สุด</p>
+
+    <div class="summary-card">
+      <h4>สรุปออเดอร์ — โต๊ะ <span id="sumTable">-</span></h4>
+      <div id="sumItems"></div>
+      <div class="cart-total-row"><span>ยอดรวมทั้งหมด</span><span id="sumTotal">0.-</span></div>
+    </div>
+
+    <div class="pay-option" id="payNow" onclick="choosePayment('now')">
+      <div class="radio"></div>
+      <div class="po-text"><b>ชำระผ่าน PromptPay ตอนนี้</b><span>สแกน QR จ่ายก่อนเข้าคิว รับโต๊ะได้ทันทีเมื่อถึงคิว</span></div>
+    </div>
+    <div class="pay-option" id="payLater" onclick="choosePayment('later')">
+      <div class="radio"></div>
+      <div class="po-text"><b>ชำระที่เคาน์เตอร์ทีหลัง</b><span>จ่ายเงินหลังทานเสร็จ แจ้งพนักงานที่เคาน์เตอร์</span></div>
+    </div>
+
+    <div class="qr-box" id="qrBox" style="display:none;">
+      <div class="qr-img" id="qrSvgWrap"></div>
+      <div class="amt" id="qrAmt">0.-</div>
+      <div class="qname">พร้อมเพย์ · ร้านป้องแป๋งนมสด</div>
+    </div>
+
+    <button class="btn" id="btnConfirmOrder" disabled onclick="goToStep(5)">ยืนยันคำสั่งซื้อ &amp; เข้าคิวโต๊ะ →</button>
+    <p class="proto-note">ระบบนี้เป็นเวอร์ชันต้นแบบสำหรับสาธิตแนวคิด — อยู่ระหว่างการพัฒนา</p>
+  </div>
+
+  <!-- SCREEN 5: QUEUE -->
+  <div class="screen" id="screen-5">
+    <p class="eyebrow">ขั้นตอนที่ 5 จาก 5</p>
+    <h1 class="title" style="text-align:center;">กำลังรอคิวโต๊ะ</h1>
+    <div class="queue-hero">
+      <div class="ring" style="--prog:62%;"><div class="rtext"><b id="etaMin">6</b><span>นาทีโดยประมาณ</span></div></div>
+      <div class="queue-status">โต๊ะ <span id="qTableName">A2</span> กำลังเตรียมพร้อมให้คุณ</div>
+      <div class="queue-sub">เราจะแจ้งเตือนทันทีที่โต๊ะพร้อม กรุณาอยู่ใกล้ๆ ร้าน</div>
+    </div>
+
+    <div class="qinfo-card">
+      <div class="qinfo-row"><span>คิวของคุณ</span><b id="qNick">-</b></div>
+      <div class="qinfo-row"><span>โต๊ะที่จอง</span><b id="qTable2">-</b></div>
+      <div class="qinfo-row"><span>จำนวนออเดอร์</span><b id="qItems">-</b></div>
+      <div class="qinfo-row"><span>สถานะการชำระเงิน</span><b id="qPay">-</b></div>
+    </div>
+
+    <button class="btn" onclick="simulateBell()">🔔 จำลองแจ้งเตือนเมื่อถึงคิว (สาธิต)</button>
+    <button class="btn secondary" onclick="restartFlow()">เริ่มออเดอร์ใหม่</button>
+  </div>
+
+  <!-- SWEETNESS MODAL -->
+  <div class="modal-wrap" id="sweetModal">
+    <div class="modal">
+      <h3 id="smName">ชื่อเมนู</h3>
+      <p class="mp">เลือกระดับความหวานและท็อปปิ้งเพิ่มเติม</p>
+      <div class="sweet-opt">
+        <input type="radio" name="sweet" id="sw50" value="50%"><label for="sw50">หวาน<br>50%</label>
+        <input type="radio" name="sweet" id="sw70" value="70%" checked><label for="sw70">หวาน<br>70%</label>
+        <input type="radio" name="sweet" id="sw100" value="100%"><label for="sw100">หวาน<br>100%</label>
+      </div>
+      <div class="topping-list" id="toppingList"></div>
+      <button class="btn" onclick="confirmAddToCart()">เพิ่มลงตะกร้า</button>
+      <button class="btn ghost" onclick="closeSweetModal()">ยกเลิก</button>
+    </div>
+  </div>
+
+  <!-- CART MODAL -->
+  <div class="modal-wrap" id="cartModal">
+    <div class="modal">
+      <h3>ตะกร้าของคุณ</h3>
+      <p class="mp">ตรวจสอบรายการก่อนไปเลือกโต๊ะ</p>
+      <div id="cartList" style="max-height:280px; overflow-y:auto;"></div>
+      <div class="cart-total-row"><span>รวมทั้งหมด</span><span id="cartModalTotal">0.-</span></div>
+      <button class="btn" onclick="closeCartModal()">เสร็จสิ้น</button>
+    </div>
+  </div>
+
+  <!-- BELL OVERLAY -->
+  <div class="bell-overlay" id="bellOverlay">
+    <div class="bell-card">
+      <div class="bell-icon">🔔</div>
+      <h3>โต๊ะของคุณพร้อมแล้ว!</h3>
+      <p>เชิญที่เคาน์เตอร์ พนักงานกำลังเตรียมโต๊ะเรียบร้อยแล้ว</p>
+      <div class="tblnum" id="bellTable">โต๊ะ A2</div>
+      <button class="btn" style="margin-top:0;" onclick="closeBell()">รับทราบ ยืนยันเข้าโต๊ะ</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const PRODUCTS = [
+  {id:'m1', name:'นมสดป้องแป๋ง', cat:'milk', price:55, icon:'🥛', sweet:true},
+  {id:'m2', name:'ชานมไข่มุกนมสด', cat:'milk', price:50, icon:'🧋', sweet:true},
+  {id:'m3', name:'นมสดสตรอว์เบอร์รี่', cat:'milk', price:60, icon:'🍓', sweet:true},
+  {id:'m4', name:'นมสดโกโก้เข้มข้น', cat:'milk', price:58, icon:'🍫', sweet:true},
+  {id:'s1', name:'น้ำเต้าหู้ทรงเครื่อง', cat:'soy', price:35, icon:'🥣', sweet:true},
+  {id:'s2', name:'น้ำเต้าหู้ร้อน', cat:'soy', price:25, icon:'🍵', sweet:true},
+  {id:'t1', name:'ปังปิ้งเนยน้ำตาล', cat:'toast', price:49, icon:'🍞', sweet:false},
+  {id:'t2', name:'ปังปิ้งสังขยาใบเตย', cat:'toast', price:40, icon:'🍞', sweet:false},
+  {id:'t3', name:'ปังปิ้งคาราเมล', cat:'toast', price:52, icon:'🍞', sweet:false},
+  {id:'d1', name:'เต้าฮวยนมสด', cat:'dessert', price:45, icon:'🍮', sweet:false},
+  {id:'d2', name:'บิงซูนมสด', cat:'dessert', price:89, icon:'🍧', sweet:false},
+  {id:'d3', name:'ไอศกรีมนมสด', cat:'dessert', price:39, icon:'🍦', sweet:false},
+];
+const TOPPINGS = [
+  {id:'tp1', name:'ไข่มุก', price:10},
+  {id:'tp2', name:'วุ้นมะพร้าว', price:10},
+  {id:'tp3', name:'ปุดดิ้งนมสด', price:15},
+];
+const SETS = [
+  {min:0, max:50, name:'เซ็ตประหยัด 50.-', desc:'นมสด 1 แก้ว + ปังปิ้งเนยน้ำตาล', total:49, items:['m1','t1']},
+  {min:0, max:100, name:'เซ็ตคุ้ม 2 คน ไม่เกิน 100.-', desc:'นมสด 2 แก้ว + ปังปิ้งเนยน้ำตาล', total:95, items:['m1','m1','t1']},
+  {min:100, max:150, name:'เซ็ตฟินจัด 140.-', desc:'ชานมไข่มุก 1 + บิงซูนมสด 1', total:139, items:['m2','d2']},
+];
+const TABLE_ZONES = {
+  A:[ {id:'A1',status:'green'}, {id:'A2',status:'gold'}, {id:'A3',status:'red'} ],
+  B:[ {id:'B1',status:'red'}, {id:'B2',status:'green'}, {id:'B3',status:'gold'} ],
+  D:[ {id:'D1',status:'green'}, {id:'D2',status:'gold'} ],
+};
+
+/* ---------------- STATE ---------------- */
+let state = {
+  phone:'', nickname:'', cart:[], budgetFilter:0, catFilter:'all',
+  pendingProduct:null, table:null, allowShare:true, paymentMethod:null,
+  floorMode:'2d', currentStep:1
+};
+let cartId = 0;
+
+/* ---------------- STEP NAV ---------------- */
+function goToStep(n){
+  document.getElementById('screen-'+state.currentStep).classList.remove('active');
+  document.getElementById('screen-'+n).classList.add('active');
+  document.querySelectorAll('.steps .dot').forEach(d=>{
+    const s = parseInt(d.dataset.step);
+    d.classList.toggle('done', s < n);
+    d.classList.toggle('active', s <= n);
+  });
+  state.currentStep = n;
+  const subs = {
+    1:'ลงชื่อเข้าใช้เพื่อสะสมแต้ม', 2:'เลือกเมนูที่ชอบ', 3:'เลือกโต๊ะของคุณ',
+    4:'ยืนยันและชำระเงิน', 5:'รอคิวโต๊ะพร้อม'
+  };
+  document.getElementById('topbarSub').textContent = subs[n];
+  if(n===2) renderMenu();
+  if(n===3) renderTables();
+  if(n===4) renderPayment();
+  if(n===5) renderQueue();
+  document.querySelector('.phone').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ---------------- SCREEN 1: LOGIN ---------------- */
+const inpPhone = document.getElementById('inpPhone');
+const inpNick = document.getElementById('inpNick');
+function validateLogin(){
+  document.getElementById('btnLogin').disabled = !(inpPhone.value.trim().length>=9 && inpNick.value.trim().length>0);
+}
+inpPhone.addEventListener('input', ()=>{ state.phone = inpPhone.value; validateLogin(); });
+inpNick.addEventListener('input', ()=>{ state.nickname = inpNick.value; validateLogin(); });
+function skipToGuest(){
+  state.nickname = state.nickname || 'ลูกค้าทั่วไป';
+  goToStep(2);
+}
+
+/* ---------------- SCREEN 2: MENU ---------------- */
+document.getElementById('budgetChips').addEventListener('click', e=>{
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#budgetChips .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  state.budgetFilter = parseInt(chip.dataset.budget);
+  renderSetSuggestions();
+});
+document.getElementById('catChips').addEventListener('click', e=>{
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#catChips .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  state.catFilter = chip.dataset.cat;
+  renderGrid();
+});
+
+function renderMenu(){
+  renderSetSuggestions();
+  renderGrid();
+  renderCartBar();
+}
+
+function renderSetSuggestions(){
+  const wrap = document.getElementById('setSuggestions');
+  let list = SETS;
+  if(state.budgetFilter>0){
+    list = SETS.filter(s => state.budgetFilter===50 ? s.max<=50 : state.budgetFilter===100 ? s.max<=100 : s.min>=100);
+  }
+  wrap.innerHTML = list.map(s=>`
+    <div class="set-card">
+      <div class="info"><b>${s.name}</b><span>${s.desc}</span></div>
+      <button onclick="addSet('${s.name.replace(/'/g,"")}', ${s.total}, '${s.items.join(',')}')">฿${s.total} +</button>
+    </div>
+  `).join('') || '<p class="hint">ไม่มีเซ็ตในช่วงงบนี้ ลองดูเมนูทั้งหมดด้านล่างได้เลย</p>';
+}
+
+function addSet(name, total, itemIdsCsv){
+  const ids = itemIdsCsv.split(',');
+  ids.forEach(id=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    if(p) state.cart.push({cid:++cartId, name:p.name, price:p.price, sweet: p.sweet? '70%':null, toppings:[], setTag:name});
+  });
+  renderCartBar();
+  flashButton();
+}
+
+function renderGrid(){
+  const grid = document.getElementById('prodGrid');
+  const list = state.catFilter==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===state.catFilter);
+  const colors = {milk:'#f6e9c8', soy:'#e7ddc9', toast:'#f3ead9', dessert:'#f6dede'};
+  grid.innerHTML = list.map(p=>{
+    const qty = state.cart.filter(c=>c.name===p.name).length;
+    return `
+    <div class="prod-card">
+      ${qty>0?`<div class="qty-badge">${qty}</div>`:''}
+      <div class="thumb" style="background:${colors[p.cat]}">${p.icon}</div>
+      <div class="pname">${p.name}</div>
+      <div class="prow"><span class="price">${p.price}.-</span>
+      <button class="add-btn" onclick="openAdd('${p.id}')">+</button></div>
+    </div>`;
+  }).join('');
+}
+
+function openAdd(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  state.pendingProduct = p;
+  document.getElementById('smName').textContent = p.name;
+  document.querySelector('.sweet-opt').style.display = p.sweet ? 'flex':'none';
+  document.getElementById('sw70').checked = true;
+  document.getElementById('toppingList').innerHTML = TOPPINGS.map(t=>`
+    <div class="topping-row">
+      <span>+ ${t.name} <span class="tprice">(+${t.price}.-)</span></span>
+      <input type="checkbox" value="${t.id}" class="topcheck">
+    </div>`).join('');
+  document.getElementById('sweetModal').classList.add('show');
+}
+function closeSweetModal(){ document.getElementById('sweetModal').classList.remove('show'); }
+function confirmAddToCart(){
+  const p = state.pendingProduct;
+  const sweetVal = p.sweet ? document.querySelector('input[name=sweet]:checked').value : null;
+  const chosenTop = Array.from(document.querySelectorAll('.topcheck:checked')).map(cb=>TOPPINGS.find(t=>t.id===cb.value));
+  const toppingTotal = chosenTop.reduce((s,t)=>s+t.price,0);
+  state.cart.push({cid:++cartId, name:p.name, price:p.price+toppingTotal, sweet:sweetVal, toppings:chosenTop.map(t=>t.name)});
+  closeSweetModal();
+  renderGrid();
+  renderCartBar();
+  flashButton();
+}
+function flashButton(){
+  const b = document.getElementById('btnToTable');
+  b.disabled = state.cart.length===0;
+}
+
+function cartTotal(){ return state.cart.reduce((s,c)=>s+c.price,0); }
+function renderCartBar(){
+  const bar = document.getElementById('cartBar');
+  bar.style.display = state.cart.length? 'flex':'none';
+  document.getElementById('cbCount').textContent = state.cart.length;
+  document.getElementById('cbTotal').textContent = cartTotal()+'.-';
+  document.getElementById('btnToTable').disabled = state.cart.length===0;
+}
+
+function openCartModal(){
+  document.getElementById('cartList').innerHTML = state.cart.map(c=>`
+    <div class="cart-item-row">
+      <div><div class="ci-name">${c.name}</div>
+      <div class="ci-meta">${c.sweet?('หวาน '+c.sweet+' '):''}${c.toppings.length?('+ '+c.toppings.join(', ')):''}${c.setTag?('เซ็ต: '+c.setTag):''}</div>
+      <button class="ci-remove" onclick="removeCartItem(${c.cid})">ลบรายการ</button></div>
+      <div class="ci-price">${c.price}.-</div>
+    </div>`).join('') || '<p class="hint">ยังไม่มีรายการในตะกร้า</p>';
+  document.getElementById('cartModalTotal').textContent = cartTotal()+'.-';
+  document.getElementById('cartModal').classList.add('show');
+}
+function closeCartModal(){ document.getElementById('cartModal').classList.remove('show'); }
+function removeCartItem(cid){
+  state.cart = state.cart.filter(c=>c.cid!==cid);
+  renderCartBar(); renderGrid(); openCartModal();
+}
+
+/* ---------------- SCREEN 3: TABLE ---------------- */
+function setFloorMode(mode){
+  state.floorMode = mode;
+  document.getElementById('btn2d').classList.toggle('active', mode==='2d');
+  document.getElementById('btn3d').classList.toggle('active', mode==='3d');
+  const floor = document.getElementById('floorEl');
+  floor.classList.toggle('mode-3d', mode==='3d');
+  floor.classList.toggle('mode-2d', mode==='2d');
+}
+
+function renderTables(){
+  ['A','B','D'].forEach(z=>{
+    const wrap = document.getElementById('zone'+z);
+    wrap.innerHTML = TABLE_ZONES[z].map(t=>{
+      const cap = z==='A' ? '1-3 คน' : z==='B' ? '3-5 คน' : '6-10 คน';
+      const label = t.status==='green'?'ว่าง':t.status==='gold'?'ร่วมได้':'เต็ม';
+      const selected = state.table && state.table.id===t.id ? 'selected':'';
+      return `<div class="table-tile status-${t.status} ${selected}" onclick="selectTable('${z}','${t.id}','${t.status}','${cap}')">
+        ${t.id}<small>${label}</small></div>`;
+    }).join('');
+  });
+}
+
+function selectTable(zone, id, status, cap){
+  if(status==='red') return;
+  state.table = {zone, id, status, cap};
+  renderTables();
+  const info = document.getElementById('tableInfo');
+  info.style.display='block';
+  const occ = status==='gold' ? 1 : 0;
+  const capNum = parseInt(cap);
+  info.innerHTML = `
+    <div class="ti-row"><span>โต๊ะที่เลือก</span><b>${id} (โซน ${zone})</b></div>
+    <div class="ti-row"><span>รองรับได้ทั้งหมด</span><b>${cap}</b></div>
+    <div class="ti-row"><span>จำนวนคนที่นั่งอยู่ตอนนี้</span><b>${occ} คน</b></div>
+    <div class="ti-row"><span>สถานะ</span><b>${status==='green'?'ว่างทั้งโต๊ะ':'นั่งร่วมกับผู้อื่นได้'}</b></div>`;
+  document.getElementById('btnToPayment').disabled = false;
+}
+function toggleShare(){
+  state.allowShare = !state.allowShare;
+  document.getElementById('shareSwitch').classList.toggle('on', state.allowShare);
+}
+
+/* ---------------- SCREEN 4: PAYMENT ---------------- */
+function renderPayment(){
+  document.getElementById('sumTable').textContent = state.table ? state.table.id : '-';
+  document.getElementById('sumItems').innerHTML = state.cart.map(c=>`
+    <div class="ti-row" style="display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--cream-300);">
+      <span>${c.name}${c.sweet?(' · หวาน '+c.sweet):''}</span><span>${c.price}.-</span>
+    </div>`).join('');
+  document.getElementById('sumTotal').textContent = cartTotal()+'.-';
+  document.getElementById('qrAmt').textContent = cartTotal()+'.-';
+  buildFakeQR();
+}
+function choosePayment(method){
+  state.paymentMethod = method;
+  document.getElementById('payNow').classList.toggle('selected', method==='now');
+  document.getElementById('payLater').classList.toggle('selected', method==='later');
+  document.getElementById('qrBox').style.display = method==='now' ? 'block':'none';
+  document.getElementById('btnConfirmOrder').disabled = false;
+}
+function buildFakeQR(){
+  // simple generated pseudo-QR pattern (visual only, not a real scannable code)
+  let cells = '';
+  const n = 11, size = 130/n;
+  let seed = cartTotal()+ (state.table? state.table.id.length:0);
+  function rnd(){ seed = (seed*9301+49297)%233280; return seed/233280; }
+  for(let y=0;y<n;y++) for(let x=0;x<n;x++){
+    const isFinder = (x<3&&y<3)||(x>n-4&&y<3)||(x<3&&y>n-4);
+    const on = isFinder ? ((x%3!==1)||(y%3!==1)) : rnd()>0.55;
+    if(on) cells += `<rect x="${x*size}" y="${y*size}" width="${size-0.6}" height="${size-0.6}" fill="#2c1810"/>`;
+  }
+  document.getElementById('qrSvgWrap').innerHTML = `<svg width="130" height="130" viewBox="0 0 130 130">${cells}</svg>`;
+}
+
+/* ---------------- SCREEN 5: QUEUE ---------------- */
+function renderQueue(){
+  document.getElementById('qTableName').textContent = state.table? state.table.id : '-';
+  document.getElementById('qTable2').textContent = state.table? (state.table.id+' · โซน '+state.table.zone):'-';
+  document.getElementById('qNick').textContent = state.nickname || 'ลูกค้าทั่วไป';
+  document.getElementById('qItems').textContent = state.cart.length + ' รายการ';
+  document.getElementById('qPay').textContent = state.paymentMethod==='now' ? 'ชำระแล้วผ่าน PromptPay' : 'ชำระที่เคาน์เตอร์ภายหลัง';
+  document.getElementById('bellTable').textContent = 'โต๊ะ ' + (state.table? state.table.id:'-');
+}
+function simulateBell(){
+  document.getElementById('bellOverlay').classList.add('show');
+}
+function closeBell(){
+  document.getElementById('bellOverlay').classList.remove('show');
+}
+function restartFlow(){
+  state = {phone:'', nickname:'', cart:[], budgetFilter:0, catFilter:'all', pendingProduct:null, table:null, allowShare:true, paymentMethod:null, floorMode:'2d', currentStep:1};
+  cartId=0;
+  inpPhone.value=''; inpNick.value='';
+  document.getElementById('btnLogin').disabled=true;
+  document.querySelectorAll('#budgetChips .chip').forEach((c,i)=>c.classList.toggle('active', i===0));
+  document.querySelectorAll('#catChips .chip').forEach((c,i)=>c.classList.toggle('active', i===0));
+  document.getElementById('payNow').classList.remove('selected');
+  document.getElementById('payLater').classList.remove('selected');
+  document.getElementById('qrBox').style.display='none';
+  document.getElementById('tableInfo').style.display='none';
+  goToStep(1);
+}
+</script>
+</body>
+</html>

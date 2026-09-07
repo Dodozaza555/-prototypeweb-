@@ -203,6 +203,11 @@
     color:var(--cream-100);
     margin-bottom:10px;
     display:flex;
+    flex-direction:column;
+    gap:11px;
+  }
+  .set-top{
+    display:flex;
     justify-content:space-between;
     align-items:center;
     gap:10px;
@@ -221,6 +226,27 @@
     font-weight:600;
     cursor:pointer;
   }
+  .set-thumbs{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .set-thumb{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:11px;
+    padding:5px 10px 5px 5px;
+  }
+  .set-thumb .sti{
+    width:28px;height:28px;border-radius:8px;
+    background:rgba(255,255,255,.16);
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px; flex:0 0 auto;
+  }
+  .set-thumb span.stn{font-size:10.5px; color:var(--cream-200); white-space:nowrap; font-weight:500;}
 
   .grid{display:grid; grid-template-columns:1fr 1fr; gap:11px;}
   .prod-card{
@@ -851,12 +877,22 @@ function renderSetSuggestions(){
   if(state.budgetFilter>0){
     list = SETS.filter(s => state.budgetFilter===50 ? s.max<=50 : state.budgetFilter===100 ? s.max<=100 : s.min>=100);
   }
-  wrap.innerHTML = list.map(s=>`
+  wrap.innerHTML = list.map(s=>{
+    const thumbs = s.items.map(id=>{
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(!p) return '';
+      return `<div class="set-thumb"><span class="sti">${p.icon}</span><span class="stn">${p.name}</span></div>`;
+    }).join('');
+    return `
     <div class="set-card">
-      <div class="info"><b>${s.name}</b><span>${s.desc}</span></div>
-      <button onclick="addSet('${s.name.replace(/'/g,"")}', ${s.total}, '${s.items.join(',')}')">฿${s.total} +</button>
+      <div class="set-top">
+        <div class="info"><b>${s.name}</b><span>${s.desc}</span></div>
+        <button onclick="addSet('${s.name.replace(/'/g,"")}', ${s.total}, '${s.items.join(',')}')">฿${s.total} +</button>
+      </div>
+      <div class="set-thumbs">${thumbs}</div>
     </div>
-  `).join('') || '<p class="hint">ไม่มีเซ็ตในช่วงงบนี้ ลองดูเมนูทั้งหมดด้านล่างได้เลย</p>';
+  `;
+  }).join('') || '<p class="hint">ไม่มีเซ็ตในช่วงงบนี้ ลองดูเมนูทั้งหมดด้านล่างได้เลย</p>';
 }
 
 function addSet(name, total, itemIdsCsv){

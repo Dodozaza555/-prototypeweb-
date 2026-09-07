@@ -351,7 +351,9 @@
   .legend i{width:9px;height:9px;border-radius:50%; display:inline-block;}
 
   .floor{
-    background:linear-gradient(180deg,#f2ecdf,#e9decb);
+    background:
+      radial-gradient(rgba(94,18,32,.07) 1px, transparent 1.4px) 0 0/18px 18px,
+      linear-gradient(180deg,#f8f2e2,#efe2c4);
     border-radius:var(--radius-md); border:1px solid var(--cream-300);
     padding:16px; perspective:1400px; overflow:hidden; position:relative;
     transition:background .35s ease, padding .35s ease;
@@ -396,28 +398,41 @@
   .floor.mode-3d .tables-row{ gap:28px; row-gap:34px; }
 
   .table-tile{
-    width:78px; height:56px; border-radius:6px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    font-family:'Kanit',sans-serif; font-size:12.5px; font-weight:600; color:#fff;
-    cursor:pointer; border:2px solid transparent; transition:transform .15s, box-shadow .3s;
+    width:auto; min-width:76px;
+    padding:9px 12px;
+    border-radius:14px;
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
+    gap:3px;
+    font-family:'Kanit',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; border:1.6px solid var(--cream-300);
+    background:#fff;
+    box-shadow:0 3px 8px rgba(94,18,32,.08);
+    transition:transform .15s, box-shadow .2s, border-color .2s;
     position:relative;
   }
-  .table-tile small{font-family:'Sarabun',sans-serif; font-weight:500; font-size:9.5px; opacity:.9;}
-  .table-tile.status-green{background:var(--green-600);}
-  .table-tile.status-gold{background:var(--gold-500);}
-  .table-tile.status-red{background:var(--red-600); cursor:not-allowed; opacity:.65;}
-  .table-tile.selected{border-color:var(--ink); transform:translateY(-3px); box-shadow:0 8px 14px rgba(0,0,0,.25);}
+  .table-tile .t-dot{width:7px; height:7px; border-radius:50%;}
+  .table-tile .t-code{color:var(--ink);}
+  .table-tile small{font-family:'Sarabun',sans-serif; font-weight:500; font-size:10px; color:var(--ink-soft);}
+
+  .table-tile.status-green{border-color:#bcd6bb;}
+  .table-tile.status-green .t-dot{background:var(--green-600);}
+  .table-tile.status-gold{border-color:#e6cd8f;}
+  .table-tile.status-gold .t-dot{background:var(--gold-500);}
+  .table-tile.status-red{border-color:#e2b3ae; cursor:not-allowed; opacity:.7;}
+  .table-tile.status-red .t-dot{background:var(--red-600);}
+  .table-tile.status-red .t-code{color:var(--red-600);}
+
+  .table-tile.selected{border-color:var(--maroon-700); box-shadow:0 8px 16px rgba(94,18,32,.22); transform:translateY(-3px);}
 
   .floor.mode-3d .table-tile{
-    border-radius:5px;
     transform:translateZ(8px);
     box-shadow:
-      0 9px 0 -1px rgba(0,0,0,.22),
-      0 15px 16px rgba(0,0,0,.28);
+      0 9px 0 -1px rgba(94,18,32,.10),
+      0 15px 16px rgba(44,24,16,.18);
   }
   .floor.mode-3d .table-tile.selected{
     transform:translateZ(8px) translateY(-3px);
-    box-shadow:0 9px 0 -1px rgba(0,0,0,.22), 0 20px 20px rgba(0,0,0,.32);
+    box-shadow:0 9px 0 -1px rgba(94,18,32,.10), 0 20px 20px rgba(44,24,16,.22);
   }
 
   .chair{
@@ -514,6 +529,88 @@
     padding:9px 22px; border-radius:12px; margin-bottom:16px;
   }
 
+  /* ADMIN / BACK OFFICE */
+  .admin-header{
+    background:linear-gradient(160deg,var(--maroon-900),var(--maroon-700) 65%, var(--maroon-600));
+    color:var(--cream-100);
+    padding:calc(20px + env(safe-area-inset-top)) 20px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .admin-header::before{
+    content:'';
+    position:absolute; top:-34px; right:-34px; width:150px; height:150px;
+    background: conic-gradient(from 200deg at 0% 100%,
+      var(--gold-300) 0deg 7deg, transparent 7deg 21deg,
+      var(--gold-300) 21deg 28deg, transparent 28deg 42deg,
+      var(--gold-300) 42deg 49deg, transparent 49deg 63deg,
+      var(--gold-300) 63deg 70deg, transparent 70deg 84deg,
+      var(--gold-300) 84deg 91deg, transparent 91deg 105deg);
+    opacity:.32;
+    pointer-events:none;
+  }
+  .admin-back{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:12.5px; color:var(--cream-200); background:none; border:none;
+    cursor:pointer; padding:0; margin-bottom:10px; font-family:'Sarabun',sans-serif;
+  }
+  .admin-eyebrow{font-size:11.5px; color:var(--gold-300); font-weight:600; letter-spacing:.3px; margin:0 0 4px;}
+  .admin-title{font-size:20px; font-weight:600; margin:0 0 4px;}
+  .admin-sub{font-size:12.5px; color:var(--cream-300); margin:0;}
+
+  .admin-body{padding:18px 20px calc(30px + env(safe-area-inset-bottom));}
+
+  .admin-card{
+    background:#fff; border:1px solid var(--cream-300); border-radius:var(--radius-md);
+    padding:15px; margin-bottom:14px;
+  }
+  .admin-card h4{margin:0 0 3px; font-size:14px; font-family:'Kanit',sans-serif;}
+  .admin-card .ac-sub{font-size:11.5px; color:var(--ink-soft); margin:0 0 12px;}
+
+  .stat-row{display:flex; gap:10px;}
+  .stat-pill{flex:1; text-align:center; border-radius:12px; padding:12px 6px;}
+  .stat-pill b{display:block; font-family:'Kanit',sans-serif; font-size:20px; line-height:1.1; margin-bottom:2px;}
+  .stat-pill span{font-size:10.5px; color:var(--ink-soft);}
+  .stat-pill.st-empty{background:var(--green-100);}
+  .stat-pill.st-empty b{color:var(--green-600);}
+  .stat-pill.st-share{background:var(--gold-100);}
+  .stat-pill.st-share b{color:var(--gold-500);}
+  .stat-pill.st-full{background:var(--red-100);}
+  .stat-pill.st-full b{color:var(--red-600);}
+
+  .zone-mini-row{display:flex; justify-content:space-between; font-size:12px; padding:7px 0; border-bottom:1px dashed var(--cream-300); color:var(--ink-soft);}
+  .zone-mini-row:last-child{border-bottom:none;}
+  .zone-mini-row b{color:var(--ink); font-weight:600;}
+
+  .order-row{display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px dashed var(--cream-300); gap:10px;}
+  .order-row:last-child{border-bottom:none;}
+  .order-row .or-left b{display:block; font-size:13px;}
+  .order-row .or-left span{font-size:11px; color:var(--ink-soft);}
+  .order-row .or-right{text-align:right; flex:0 0 auto;}
+  .order-row .or-right .or-amt{font-size:13px; font-weight:600; color:var(--maroon-700); display:block;}
+  .order-tag{display:inline-block; font-size:10px; font-weight:600; padding:2px 8px; border-radius:8px; margin-top:2px;}
+  .order-tag.tag-kitchen{background:var(--gold-100); color:var(--gold-500);}
+  .order-tag.tag-ready{background:var(--green-100); color:var(--green-600);}
+  .order-tag.tag-paid{background:var(--cream-300); color:var(--ink-soft);}
+
+  .sales-hero{display:flex; align-items:baseline; gap:8px; margin-bottom:14px;}
+  .sales-hero b{font-family:'Kanit',sans-serif; font-size:28px; color:var(--maroon-900);}
+  .sales-hero span{font-size:12px; color:var(--ink-soft);}
+  .sales-mini-row{display:flex; gap:10px;}
+  .sales-mini{flex:1; background:var(--cream-100); border-radius:10px; padding:10px; text-align:center;}
+  .sales-mini b{display:block; font-family:'Kanit',sans-serif; font-size:15px; color:var(--ink);}
+  .sales-mini span{font-size:10.5px; color:var(--ink-soft);}
+
+  .menu-rank-row{display:flex; align-items:center; gap:10px; padding:7px 0;}
+  .menu-rank-row .mr-name{flex:0 0 118px; font-size:12px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .menu-rank-row .mr-bar-wrap{flex:1; background:var(--cream-200); border-radius:6px; height:8px; overflow:hidden;}
+  .menu-rank-row .mr-bar{display:block; height:100%; border-radius:6px;}
+  .menu-rank-row.mr-top .mr-bar{background:var(--green-600);}
+  .menu-rank-row.mr-low .mr-bar{background:var(--red-600);}
+  .menu-rank-row .mr-count{flex:0 0 auto; font-size:11px; color:var(--ink-soft); width:38px; text-align:right;}
+  .menu-rank-label{font-size:11px; font-weight:600; color:var(--ink-soft); margin:12px 0 6px;}
+  .menu-rank-label:first-child{margin-top:0;}
+
   ::selection{background:var(--gold-300);}
 
   /* ---------- RESPONSIVE ---------- */
@@ -572,7 +669,7 @@
 <div class="phone">
   <div class="statusbar"><span>9:41</span><span>●●●●  📶  🔋</span></div>
 
-  <div class="topbar">
+  <div class="topbar" id="mainTopbar">
     <div class="brand"><div class="mark">豆</div><div><div>ป้องแป๋งนมสด</div><small id="topbarSub">ลงชื่อเข้าใช้เพื่อสะสมแต้ม</small></div></div>
     <div class="steps">
       <div class="dot active" data-step="1"></div>
@@ -599,6 +696,7 @@
 
     <button class="btn" id="btnLogin" disabled onclick="goToStep(2)">เข้าสู่ระบบ &amp; เริ่มสั่งเมนู</button>
     <button class="btn ghost" onclick="skipToGuest()">ข้ามไปก่อน — สั่งแบบไม่สมัครสมาชิก</button>
+    <button class="btn ghost" onclick="openAdmin()">🧧 สำหรับพนักงาน — ดูระบบหลังบ้าน</button>
   </div>
 
   <!-- SCREEN 2: MENU -->
@@ -734,6 +832,52 @@
     <button class="btn secondary" onclick="restartFlow()">เริ่มออเดอร์ใหม่</button>
   </div>
 
+  <!-- SCREEN ADMIN: BACK OFFICE -->
+  <div class="screen" id="screen-admin">
+    <div class="admin-header">
+      <button class="admin-back" onclick="closeAdmin()">‹ กลับหน้าลูกค้า</button>
+      <p class="admin-eyebrow">ระบบหลังบ้าน</p>
+      <h1 class="admin-title">ภาพรวมร้านวันนี้</h1>
+      <p class="admin-sub">ป้องแป๋งนมสด · <span id="adminDate">-</span></p>
+    </div>
+    <div class="admin-body">
+
+      <div class="admin-card">
+        <h4>สถานะโต๊ะ ว่าง–เต็ม</h4>
+        <p class="ac-sub">อัปเดตเรียลไทม์จากผังร้าน</p>
+        <div class="stat-row" id="adminTableStats"></div>
+        <div id="adminZoneBreakdown" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="admin-card">
+        <h4>รายการออเดอร์วันนี้</h4>
+        <p class="ac-sub">เรียงจากล่าสุดไปเก่าสุด</p>
+        <div id="adminOrders"></div>
+      </div>
+
+      <div class="admin-card">
+        <h4>สรุปยอดขายวันนี้</h4>
+        <p class="ac-sub">ยอดขายและกำไรโดยประมาณจนถึงตอนนี้</p>
+        <div class="sales-hero"><b id="adminSalesTotal">0.-</b><span>ยอดขายรวม</span></div>
+        <div class="sales-mini-row">
+          <div class="sales-mini"><b id="adminOrderCount">0</b><span>ออเดอร์</span></div>
+          <div class="sales-mini"><b id="adminAvgOrder">0.-</b><span>เฉลี่ย/ออเดอร์</span></div>
+          <div class="sales-mini"><b id="adminNetProfit">0.-</b><span>กำไรสุทธิโดยประมาณ</span></div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h4>เมนูขายดี &amp; ขายไม่ค่อยได้ วันนี้</h4>
+        <p class="ac-sub">เทียบจากจำนวนที่สั่งวันนี้</p>
+        <p class="menu-rank-label">ขายดีที่สุด</p>
+        <div id="adminTopMenu"></div>
+        <p class="menu-rank-label">ขายไม่ค่อยได้</p>
+        <div id="adminLowMenu"></div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- SWEETNESS MODAL -->
   <div class="modal-wrap" id="sweetModal">
     <div class="modal">
@@ -805,6 +949,19 @@ const TABLE_ZONES = {
   B:[ {id:'B1',status:'red'}, {id:'B2',status:'green'}, {id:'B3',status:'gold'} ],
   D:[ {id:'D1',status:'green'}, {id:'D2',status:'gold'} ],
 };
+const ORDERS_TODAY = [
+  {id:'#1042', table:'A2', time:'14:32', items:3, total:189, status:'kitchen'},
+  {id:'#1041', table:'D1', time:'14:20', items:5, total:342, status:'ready'},
+  {id:'#1040', table:'B3', time:'14:05', items:2, total:105, status:'paid'},
+  {id:'#1039', table:'A1', time:'13:48', items:4, total:228, status:'paid'},
+  {id:'#1038', table:'B2', time:'13:30', items:1, total:55, status:'paid'},
+  {id:'#1037', table:'D2', time:'13:12', items:6, total:410, status:'paid'},
+];
+const MENU_SOLD_TODAY = [
+  {id:'m2', sold:34}, {id:'m1', sold:29}, {id:'t1', sold:22}, {id:'d2', sold:18},
+  {id:'m3', sold:15}, {id:'s1', sold:9}, {id:'t3', sold:7}, {id:'d3', sold:6},
+  {id:'s2', sold:4}, {id:'t2', sold:4}, {id:'m4', sold:3}, {id:'d1', sold:2},
+];
 
 /* ---------------- STATE ---------------- */
 let state = {
@@ -995,9 +1152,9 @@ function renderTables(){
       const cap = z==='A' ? '1-3 คน' : z==='B' ? '3-5 คน' : '6-10 คน';
       const label = t.status==='green'?'ว่าง':t.status==='gold'?'ร่วมได้':'เต็ม';
       const selected = state.table && state.table.id===t.id ? 'selected':'';
-      return `<div class="table-tile status-${t.status} ${selected}" onclick="selectTable('${z}','${t.id}','${t.status}','${cap}')">
+      return `<div class="table-tile status-${t.status} ${selected}" onclick="selectTable('${z}','${t.id}','${t.status}','${cap}')" title="${label}">
         <span class="chair c-top"></span><span class="chair c-bottom"></span><span class="chair c-left"></span><span class="chair c-right"></span>
-        ${t.id}<small>${label}</small></div>`;
+        <span class="t-dot"></span><span class="t-code">${t.id}</span><small>${cap}</small></div>`;
     }).join('');
   });
 }
@@ -1069,6 +1226,74 @@ function simulateBell(){
 function closeBell(){
   document.getElementById('bellOverlay').classList.remove('show');
 }
+/* ---------------- ADMIN / BACK OFFICE ---------------- */
+let adminPrevStep = 1;
+function openAdmin(){
+  adminPrevStep = state.currentStep;
+  document.getElementById('screen-'+state.currentStep).classList.remove('active');
+  document.getElementById('screen-admin').classList.add('active');
+  document.getElementById('mainTopbar').style.display = 'none';
+  renderAdmin();
+  document.querySelector('.phone').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function closeAdmin(){
+  document.getElementById('screen-admin').classList.remove('active');
+  document.getElementById('mainTopbar').style.display = '';
+  goToStep(adminPrevStep);
+}
+function renderAdmin(){
+  const now = new Date();
+  document.getElementById('adminDate').textContent = now.toLocaleDateString('th-TH', {day:'numeric', month:'long', year:'numeric'});
+
+  const all = [...TABLE_ZONES.A, ...TABLE_ZONES.B, ...TABLE_ZONES.D];
+  const emptyCount = all.filter(t=>t.status==='green').length;
+  const shareCount = all.filter(t=>t.status==='gold').length;
+  const fullCount = all.filter(t=>t.status==='red').length;
+  document.getElementById('adminTableStats').innerHTML = `
+    <div class="stat-pill st-empty"><b>${emptyCount}</b><span>ว่าง</span></div>
+    <div class="stat-pill st-share"><b>${shareCount}</b><span>นั่งร่วมได้</span></div>
+    <div class="stat-pill st-full"><b>${fullCount}</b><span>เต็ม</span></div>
+  `;
+  document.getElementById('adminZoneBreakdown').innerHTML = ['A','B','D'].map(z=>{
+    const zc = TABLE_ZONES[z];
+    const full = zc.filter(t=>t.status==='red').length;
+    return `<div class="zone-mini-row"><span>โซน ${z}</span><b>${zc.length-full}/${zc.length} โต๊ะว่าง</b></div>`;
+  }).join('');
+
+  const tagLabel = {kitchen:'กำลังทำ', ready:'พร้อมเสิร์ฟ', paid:'ชำระแล้ว'};
+  document.getElementById('adminOrders').innerHTML = ORDERS_TODAY.map(o=>`
+    <div class="order-row">
+      <div class="or-left"><b>โต๊ะ ${o.table} · ${o.id}</b><span>${o.time} น. · ${o.items} รายการ</span></div>
+      <div class="or-right"><span class="or-amt">${o.total}.-</span><span class="order-tag tag-${o.status}">${tagLabel[o.status]}</span></div>
+    </div>`).join('');
+
+  const total = ORDERS_TODAY.reduce((s,o)=>s+o.total,0);
+  const count = ORDERS_TODAY.length;
+  const avg = count? Math.round(total/count):0;
+  const netProfit = Math.round(total*0.42);
+  document.getElementById('adminSalesTotal').textContent = total.toLocaleString()+'.-';
+  document.getElementById('adminOrderCount').textContent = count;
+  document.getElementById('adminAvgOrder').textContent = avg+'.-';
+  document.getElementById('adminNetProfit').textContent = netProfit.toLocaleString()+'.-';
+
+  const ranked = MENU_SOLD_TODAY.map(m=>({...m, p:PRODUCTS.find(p=>p.id===m.id)})).filter(m=>m.p).sort((a,b)=>b.sold-a.sold);
+  const maxSold = ranked[0].sold;
+  const top = ranked.slice(0,3);
+  const low = ranked.slice(-3).reverse();
+  document.getElementById('adminTopMenu').innerHTML = top.map(m=>`
+    <div class="menu-rank-row mr-top">
+      <span class="mr-name">${m.p.icon} ${m.p.name}</span>
+      <span class="mr-bar-wrap"><span class="mr-bar" style="width:${Math.round(m.sold/maxSold*100)}%"></span></span>
+      <span class="mr-count">${m.sold} แก้ว</span>
+    </div>`).join('');
+  document.getElementById('adminLowMenu').innerHTML = low.map(m=>`
+    <div class="menu-rank-row mr-low">
+      <span class="mr-name">${m.p.icon} ${m.p.name}</span>
+      <span class="mr-bar-wrap"><span class="mr-bar" style="width:${Math.max(6,Math.round(m.sold/maxSold*100))}%"></span></span>
+      <span class="mr-count">${m.sold} แก้ว</span>
+    </div>`).join('');
+}
+
 function restartFlow(){
   state = {phone:'', nickname:'', cart:[], budgetFilter:0, catFilter:'all', pendingProduct:null, table:null, allowShare:true, paymentMethod:null, floorMode:'2d', currentStep:1};
   cartId=0;
